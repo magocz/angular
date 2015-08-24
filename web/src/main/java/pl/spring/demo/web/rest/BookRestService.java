@@ -3,17 +3,18 @@ package pl.spring.demo.web.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
 import pl.spring.demo.service.BookService;
 import pl.spring.demo.to.BookTo;
 
 import java.util.List;
 
-@RestController(value = "/rest")
+@RestController()
 public class BookRestService {
 
     @Autowired
     private BookService bookService;
-
+    
     @RequestMapping(value = "/books-by-title", method = RequestMethod.GET)
     public List<BookTo> findBooksByTitle(@RequestParam(value = "titlePrefix", required = false) String titlePrefix) {
         if (StringUtils.isEmpty(titlePrefix)) {
@@ -26,9 +27,14 @@ public class BookRestService {
     public BookTo saveBook(@RequestBody BookTo book) {
         return bookService.saveBook(book);
     }
+    
+    @RequestMapping(value = "/book", method = RequestMethod.PUT)
+    public BookTo editBook(@RequestBody BookTo book) {
+        return bookService.saveBook(book);
+    }
 
     @RequestMapping(value = "/book/{id}", method = RequestMethod.DELETE)
     public void deleteBook(@PathVariable("id") long id) {
         bookService.deleteBook(id);
-    }
+    }    
 }
