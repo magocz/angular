@@ -1,40 +1,61 @@
-describe('book controller', function () {
-    'use strict';
+describe('author controller', function() {
+	'use strict';
 
-    beforeEach(function () {
-        module('app.main');
-        module('flash');
-        module('app.books');
-    });
+	beforeEach(function() {
+		module('app.main');
+		module('flash');
+		module('app.authors');
+	});
 
-    var $scope;
-    beforeEach(inject(function ($rootScope) {
-        $scope = $rootScope.$new();
-    }));
+	var $scope;
+	beforeEach(inject(function($rootScope) {
+		$scope = $rootScope.$new();
+	}));
 
-    it('search is defined', inject(function ($controller) {
-        // when
-        $controller('BookSearchController', {$scope: $scope});
-        // then
-        expect($scope.search).toBeDefined();
-    }));
+	it('search is defined', inject(function($controller) {
+		// when
+		$controller('AuthorSearchController', {
+			$scope : $scope
+		});
+		// then
+		expect($scope.search).toBeDefined();
+	}));
 
-    it('delete book should call bookService.deleteBook', inject(function ($controller, $q, bookService, Flash) {
-        // given
-        $controller('BookSearchController', {$scope: $scope});
+	it('startsWith is defined', inject(function($controller) {
+		// when
+		$controller('AuthorSearchController', {
+			$scope : $scope
+		});
+		// then
+		expect($scope.startsWith).toBeDefined();
+	}));
 
-        var bookId = 1;
-        $scope.books = [{id: bookId, title: 'test'}];
-        var deleteDeferred = $q.defer();
-        spyOn(bookService, 'deleteBook').and.returnValue(deleteDeferred.promise);
-        spyOn(Flash, 'create');
-        // when
-        $scope.deleteBook(bookId);
-        deleteDeferred.resolve();
+	it('search should call authorService.search', inject(function($controller, $q, authorService,Flash) {
+		// given
+		var searchDeferred = $q.defer();
+		var searchSpyCount = 0;
+		spyOn(authorService, 'search').and.callFake(function() {
+			searchSpyCount = searchSpyCount + 1;
+			if (searchSpyCount === 1) {
+				return {
+					then : angular.noop
+				};
+			} else if (searchSpyCount === 2) {
+				return searchDeferred.promise;
+			}
+		});
+		$controller('AuthorSearchController', {
+			$scope : $scope
+		});
+		var authorList = [{firstName : 'Jan', lastName : 'Kowalski'}];		
+		spyOn(Flash, 'create');
+		 // when
+		$scope.search();
+		searchDeferred.resolve({data : authorList});
         $scope.$digest();
         // then
-        expect(bookService.deleteBook).toHaveBeenCalledWith(bookId);
-        expect(Flash.create).toHaveBeenCalledWith('success', 'Książka została usunięta.', 'custom-class');
-        expect($scope.books.length).toBe(0);
-    }));
+        expect(authorService.search).toHaveBeenCalled();
+        expect($scope.authors.length).toBe(1);
+
+	}));
 });

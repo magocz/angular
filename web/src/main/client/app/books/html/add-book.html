@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
 <body>
-	<section>
-			<p>Title:</p>
-			<input type="text" ng-model="title"><br> <br>
+	<form novalidate name="addBook">
+		<section>
+			<p>Title:</p>			
+			<input ng-required="true" type="text" ng-model="title">
+			<span ng-show="addBook.$invalid && addBook.$submitted">Tytul jest wymagany!</span>
+			<br><br>
 			<p>Author list:</p>
 			<table>
 				<tr>
@@ -20,9 +25,9 @@
 			<br>
 			<button ng-click="addAuthor()">Add author</button>
 			<br> <br>
-			<button ng-click="addNewBook()">Add
-				book</button>
-	
-	</section>
+			<button type="submit" ng-click="addNewBook()">Add book</button>
+
+		</section>
+	</form>
 </body>
 </html>

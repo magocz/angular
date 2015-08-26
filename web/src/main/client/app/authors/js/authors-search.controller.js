@@ -3,9 +3,6 @@ angular.module('app.authors').controller('AuthorSearchController',
 			'use strict';
 
 			$scope.authors = [];
-			/*$scope.gridOptions = {
-				data : 'authors'
-			};*/
 
 			var search = function() {
 				authorService.search().then(function(response) {
@@ -16,6 +13,10 @@ angular.module('app.authors').controller('AuthorSearchController',
 			};
 			
 			search();
+			
+			$scope.search = function () {
+				search();
+			};
 			
 			$scope.startsWith = function (actual, expected) {
 			    var lowerStr = (actual + '').toLowerCase();

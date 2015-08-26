@@ -1,8 +1,9 @@
 angular.module('app.books').controller(
 		'BookEditController',
-		function($scope, $location, bookService, bookTransferService, Flash,
+		function($scope, $location, bookService, Flash,
 				$modalInstance) {
 			'use strict';
+			
 			$scope.newTitle = '';
 
 			$scope.edit = function() {

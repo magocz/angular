@@ -2,7 +2,7 @@ angular.module('app.authors').factory('authorService', function (authorRestServi
     'use strict';
 
     return {
-        search: function () {
+    	search: function () {
             return authorRestService.search();
         }
     };

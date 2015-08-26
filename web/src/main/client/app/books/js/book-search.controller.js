@@ -52,8 +52,6 @@ angular.module('app.books').controller(
 							function() {
 								Flash.create('success', 'Edycja zakonczona powodzeniem!',
 										'custom-class');
-								$scope.authors = [];
-								$location.url('/books/book-list/');
 							}, function() {
 								Flash.create('danger', 'Wyjątek', 'custom-class');
 							});
